@@ -1,0 +1,27 @@
+trigger is_gold on Opportunity(after insert, after update){
+
+	if(Trigger.isInsert){
+		for(Opportunity opp: Trigger.New){
+			Account acc=[SELECT Id, is_gold__c FROM Account where Id= :opp.AccountId];
+			List<Opportunity> oppr=[SELECT Id, Amount from Opportunity where AccontId=:acc.Id];
+			for(Opportunity oppo:oppr){
+			if(oppo.Amount>= 20000){
+				acc.is_gold__c= TRUE;
+}
+}
+	update acc;
+}
+}
+	if(Trigger.isUpdate){
+		for(Opportunity opp: Trigger.New){
+			Account acc=[SELECT Id, is_gold__c FROM Account where Id= :opp.AccountId];
+			List<Opportunity> oppr=[SELECT Id, Amount from Opportunity where AccontId=:acc.Id];
+			for(Opportunity oppo:oppr){
+			if(oppo.Amount>= 20000){
+				acc.is_gold__c= TRUE;
+}
+}
+update acc;
+}
+}
+}

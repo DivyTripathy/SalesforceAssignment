@@ -1,0 +1,34 @@
+
+trigger CreateContact on Account (after insert){
+	List<Contact> contlis= new List<Contact>();
+	for(Account acc: Trigger.New){
+	contlis.add(new Contact(
+	FirstName='Info',
+	LastName='Default',
+	Email='info@websitedomain.tld',
+	AccountId=a.Id
+	));
+}
+	insert contlis;
+}
+
+
+
+trigger updateAccountContact on Contact (after insert){
+	Integer NoOfContact;
+	List<Account> acctlis= new List<Account>();
+	for(Contact con: Trigger.New){
+	Account acc=[SELECT Id, Only_Default_Contact__c from Account where ID=:c.AccountId];
+	String accId=c.AccountId;
+	NoOfContact= Database.countQuery('SELECT count() FROM Contact where AccountId=: accId');
+	if(NoOfContact <= 1){
+		acc.Only_Default_Contact__c=TRUE;
+		acctlis.add(acc);
+}
+	else{
+		acc.Only_Default_Contact__c=FALSE;
+		acctlis.add(acc);
+	}
+}
+	update acctlis;
+}

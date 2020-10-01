@@ -1,0 +1,12 @@
+trigger UpdateAccount on Account(after update){
+
+	List<Contact> conUpdate= new List<Contact>();
+
+	for(Account acc: Trigger.New){
+		for(Contact con: [SELECT Id, FirstName, LastName, Profile__c from Contact where AccountId IN : Trigger.New]){
+			con.Profile__c = acc.Website + '/' +con.FirstName.subString(0,1) + con.LastName;
+			conUpdate.add(c);
+}
+}
+update conUpdate;
+}
